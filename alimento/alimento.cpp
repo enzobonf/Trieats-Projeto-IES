@@ -33,8 +33,24 @@ string Alimento::getNome(){
   return nome;
 }
 
+void Alimento::setNome(string novoNome) {
+  this->nome = novoNome;
+}
+
 string Alimento::getMarca(){
   return marca;
+}
+
+void Alimento::setMarca(string novaMarca) {
+  this->marca = novaMarca;
+}
+
+void Alimento::setPreco(double novoPreco) {
+  this->preco = novoPreco;
+}
+
+void Alimento::setValorCalorico(int novoValor) {
+  this->valorCalorico = novoValor;
 }
 
 double Alimento::getPreco(){
@@ -66,6 +82,8 @@ void Alimento::print() {
   cout << "ID: " << id << '\n';
   cout << "Nome: " << nome << '\n';
   cout << "Marca: " << marca << '\n';
+  cout << "Valor calórico: " << valorCalorico << '\n';
+  cout << "Preço: " << preco << '\n';
   cout << '\n';
 }
 

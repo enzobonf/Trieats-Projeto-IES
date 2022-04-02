@@ -3,6 +3,7 @@
 #include <vector>
 #include "cliente/cliente.h"
 #include "alimento/alimento.h"
+#include "log/log.h"
 
 class App {
 private:
@@ -22,6 +23,7 @@ public:
   void excluirAlimento();
   void alterarCliente();
   void alterarAlimento();
+  void gerarRelatorio();
 };
 
 #endif

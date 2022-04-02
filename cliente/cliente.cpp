@@ -32,7 +32,6 @@ void Cliente::setNome(string novoNome) {
   this->nome = novoNome;
 }
 
-
 int Cliente::getQntViagens(){
   return qnt_viagens;
 }
@@ -85,6 +84,7 @@ void Cliente::salvarNoArquivo(vector<Cliente*> clientes, string fn){
     string id_cliente = to_string(cliente->getId()) + '\n';
     string nome_cliente = cliente->getNome() + '\n';
     string data_nasc = cliente->getDataNasc() + '\n';
+    string qnt_viagens = to_string(cliente->getQntViagens()) + '\n';
 
     string historico, historico_atual, strFinal;
 
@@ -97,7 +97,7 @@ void Cliente::salvarNoArquivo(vector<Cliente*> clientes, string fn){
     
     historico_atual = "[" + result.str() + "]\n";  result.str("");
 
-    strFinal = id_cliente + nome_cliente + data_nasc + historico + historico_atual;
+    strFinal = id_cliente + nome_cliente + data_nasc + qnt_viagens + historico + historico_atual;
     
     fout.write(strFinal.c_str(), strFinal.length() * sizeof(char));
     fout.write("\n", sizeof(char));

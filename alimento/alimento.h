@@ -26,6 +26,10 @@ class Alimento {
     double getPreco();
     string getNome();
     string getMarca();
+    void setNome(string novoNome);
+    void setMarca(string novaMarca);
+    void setPreco(double novoPreco);
+    void setValorCalorico(int novoValor);
     static int validar(Alimento *alimento);
     static int procurar(vector<Alimento*> alimentos, int id);
     static void excluir(vector<Alimento*> *alimentos, int id);

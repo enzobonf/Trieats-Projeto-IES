@@ -39,6 +39,12 @@ void App::menuGeral() {
         break;
       }
       
+      case 3:
+      {
+        gerarRelatorio();
+        break;
+      }
+      
       case 0:
       {
         cout << "Saindo do programa\n";
@@ -106,8 +112,9 @@ void App::menuAlimentos(){
   while(x){
     cout << "Menu de alimentos:\n";
     cout << "\nDigite 1 para cadastrar um alimento"   << '\n';
-    cout << "Digite 2 para deletar um alimento"  << '\n'; 
-    cout << "Digite 3 para listar os alimentos"  << '\n'; 
+    cout << "Digite 2 para alterar um alimento"  << '\n'; 
+    cout << "Digite 3 para deletar um alimento"  << '\n'; 
+    cout << "Digite 4 para listar os alimentos"  << '\n'; 
     cout << "Digite 0 para sair deste menu"     << '\n';
     cin  >> x;
 
@@ -115,24 +122,22 @@ void App::menuAlimentos(){
 
     switch(x){
 
-      case 1:
-      {
+      case 1:{
         cadastrarAlimento();
         break;
       }
+
+      case 2:{
+        alterarAlimento();
+      }
       
-      case 2: {
+      case 3: {
         excluirAlimento();
         break;
       }
       
-      case 3: {
-        listarAlimentos();
-        break;
-      }
-      
       case 4: {
-        //Alimento::salvarNoArquivo(alimentos, "clientes.dat");
+        listarAlimentos();
         break;
       }
       
@@ -185,6 +190,12 @@ void App::listarAlimentos(){
 }
 
 void App::excluirCliente(){
+
+  if(!clientes.size()) {
+    cout <<  "\nNenhum cliente cadastrado\n\n";
+    return;
+  }
+  
   int id;
   cout << "Digite o id do cliente a ser excluído: ";
   cin >> id;
@@ -197,6 +208,12 @@ void App::excluirCliente(){
 }
 
 void App::excluirAlimento(){
+
+  if(!alimentos.size()) {
+    cout <<  "\nNenhum alimento cadastrado\n\n";
+    return;
+  }
+  
   int id;
   cout << "Digite o id do alimento a ser excluído: ";
   cin >> id;
@@ -210,17 +227,146 @@ void App::excluirAlimento(){
 
 void App::alterarCliente(){
 
-  int id;
+  if(!clientes.size()) {
+    cout <<  "\nNenhum cliente cadastrado\n\n";
+    return;
+  }
+
+  int id, opcao, index;
   cout << "Digite o id do cliente a ser alterado: ";
   cin >> id;
   if(id < 0){
-    cout << "O id deve ser um número positivo";
+    cout << "O id deve ser um número positivo\n";
+    return;
+  }  
+
+  string nome, dataNasc; int qntViagens;
+
+  index = Cliente::procurar(clientes, id);
+  if(index == -1){
+    cout << "\nCliente não encontrado\n"; 
     return;
   }
 
   cout << "Qual campo do cliente você deseja alterar?\n\n";
-  cout << "1 - Nome\n2 - Data de Nascimento\n3 - Quantidade de viagens\n\n";
+  cout << "1 - Nome\n2 - Data de Nascimento\n3 - Quantidade de viagens\n0 - Cancelar\n\n";
+  cin >> opcao;
 
+  switch(opcao){
+
+    case 1: {
+      cout << "Digite o novo nome: ";
+      cin >> nome;
+      clientes[index]->setNome(nome);
+    }
+    
+    case 2: {
+      cout << "Digite a nova data de nascimento: ";
+      cin >> dataNasc;
+      clientes[index]->setDataNasc(dataNasc);
+    }
+    
+    case 3: {
+      cout << "Digite a nova quantidade de viagens: ";
+      cin >> qntViagens;
+      clientes[index]->setQntViagens(qntViagens);
+    }
+
+    case 0: return;
+    
+  }
+
+  cout << "\n\nCliente alterado com sucesso!\n";
   
+}
+
+void App::alterarAlimento(){
+
+  if(!alimentos.size()) {
+    cout <<  "\nNenhum alimento cadastrado\n\n";
+    return;
+  }
+
+  int id, opcao, index;
+  cout << "Digite o id do alimento a ser alterado: ";
+  cin >> id;
+  if(id < 0){
+    cout << "O id deve ser um número positivo\n";
+    return;
+  }  
+
+  string nome, marca; int valorCalorico;
+  double preco;
+
+  index = Alimento::procurar(alimentos, id);
+  if(index == -1){
+    cout << "\nAlimento não encontrado\n"; 
+    return;
+  }
+
+  cout << "Qual campo do alimento você deseja alterar?\n\n";
+  cout << "1 - Nome\n2 - Marca\n3 - Valor calórico\n4 - Preço\n0 - Cancelar\n\n";
+  cin >> opcao;
+
+  switch(opcao){
+
+    case 1: {
+      cout << "Digite o novo nome: ";
+      cin >> nome;
+      alimentos[index]->setNome(nome);
+    }
+    
+    case 2: {
+      cout << "Digite a nova marca: ";
+      cin >> marca;
+      alimentos[index]->setMarca(marca);
+    }
+    
+    case 3: {
+      cout << "Digite o novo valor calórico: ";
+      cin >> valorCalorico;
+      alimentos[index]->setValorCalorico(valorCalorico);
+    }
+    
+    case 4: {
+      cout << "Digite o novo preço: ";
+      cin >> preco;
+      alimentos[index]->setPreco(preco);
+    }
+
+    case 0: return;
+    
+  }
+
+  cout << "\n\nAlimento alterado com sucesso!\n";
+  
+}
+
+void App::gerarRelatorio(){
+
+  string data = Log::getStrDataISO();
+  string path = "./relatorios/Relatorio-"+ data + ".txt";
+  ofstream fout(path);
+
+  fout << "---------Relatório de Clientes---------\n";
+  for(auto& cliente: clientes){
+    fout << "ID: " << cliente->getId() << '\n';
+    fout << "Nome: " << cliente->getNome() << '\n';
+    fout << "Data de nascimento: " << cliente->getDataNasc() << '\n';
+    fout << "Viagens realizadas: " << cliente->getQntViagens() << "\n\n";
+  }
+  if(!clientes.size()) fout <<  "\nNenhum cliente cadastrado\n\n";
+  fout << "--------------------------------------\n\n";
+  
+  fout << "---------Relatório de Alimentos---------\n";
+  for(auto& alimento: alimentos){
+    fout << "Nome: " << alimento->getNome() << '\n';
+    fout << "Marca: " << alimento->getMarca() << '\n';
+    fout << "Valor calórico: " << alimento->getValorCalorico() << '\n';
+    fout << "Preço: " << alimento->getPreco() << "\n\n";
+  }
+  if(!alimentos.size()) fout <<  "\nNenhum alimento cadastrado\n\n";
+  fout << "--------------------------------------\n\n";
+  fout << Log::getStrDataHora() << "\n";
   
 }
